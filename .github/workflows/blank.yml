@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: HipoTech/test_repo1
-          token: ${{ secrets.MY_TEST_PAT }}
+          token: ${{ secrets.MY_TEST_SSH_PUBLIC_KEY }}
           path: test_1
           
       # Runs a single command using the runners shell
