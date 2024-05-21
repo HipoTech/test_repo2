@@ -27,7 +27,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           eval `ssh-agent -s`
-          ssh-add - <<< '${{ secrets.MY_TEST_SSH_PUBLIC_KEY }}'
+          ssh-add - <<< '${{ secrets.GITHUB_TOKEN }}'
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout private tools
         uses: actions/checkout@v4
