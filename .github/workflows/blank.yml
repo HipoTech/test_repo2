@@ -16,7 +16,7 @@ jobs:
       ACCEPT_HEADER: application/vnd.github.v3+json
         
     steps:
-    - name: Get latest artifact URL with specified name
+    - name: Download latest artifact specified name
       id: get-artifact
       run: |
         echo "Fetching latest artifact URL with specified name"
@@ -36,12 +36,6 @@ jobs:
           curl -L \
             -H "Authorization: $AUTHORIZATION_HEADER" \
             -o $ARTIFACT_NAME.zip $LATEST_ARTIFACT_URL
-
-    # - name: Download latest artifact with specified name
-    #   run: |
-    #     echo "Downloading latest artifact with specified name from source repository"
-    #     curl -L -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
-    #       -o $ARTIFACT_NAME.zip ${{ steps.get-artifact.outputs.url }}
 
     - name: Extract artifact
       run: |
