@@ -18,8 +18,11 @@ jobs:
         ARTIFACT_NAME="my-artifact"
         REPOSITORY_OWNER="HipoTech"
         REPOSITORY_NAME="test_repo1"
-        LATEST_ARTIFACT_URL=$(curl -s -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
-          -H "Accept: application/vnd.github.v3+json" \
+        AUTHORIZATION_HEADER="Authorization: token ${{ secrets.MY_TEST_PAT }}"
+        ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
+        LATEST_ARTIFACT_URL=$(curl -s  \
+          -H "$AUTHORIZATION_HEADER" \
+          -H "$ACCEPT_HEADER" \
           "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/actions/artifacts" \
           | jq -r --arg ARTIFACT_NAME "$ARTIFACT_NAME" '.artifacts 
           | map(select(.name == $ARTIFACT_NAME)) 
