@@ -27,7 +27,7 @@ jobs:
     
     - name: Show me my dir
       run: |
-        echo ls -R ./
+        ls -R ./
     # - name: Upload a Build Artifact
     #   uses: actions/upload-artifact@v3
     #   with:
