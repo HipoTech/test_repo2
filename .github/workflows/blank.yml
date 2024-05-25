@@ -22,13 +22,13 @@ jobs:
         curl -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
              -H "Accept: application/vnd.github.v3+json" \
              -L \
-             -o artifact.zip \
-             https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts/artifact/zip
+             -o my-artifact.zip \
+             https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts/my-artifact/zip
 
     - name: Extract artifact
       run: |
         echo "Extracting artifact"
-        unzip artifact.zip -d extracted_artifact
+        unzip my-artifact.zip -d extracted_artifact
 
     - name: Log directory
       run: |
