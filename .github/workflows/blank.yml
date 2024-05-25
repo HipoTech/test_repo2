@@ -45,7 +45,7 @@ jobs:
     - name: Extract artifact
       run: |
         echo "Extracting artifact"
-        unzip artifact.zip -d extracted_artifact
+        unzip ${{ steps.get-artifact.outputs.artefact_name }}.zip -d extracted_artifact
         
     - name: Show me my dir
       run: |
@@ -54,6 +54,6 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: my-artifact2
+        name: ${{ steps.get-artifact.outputs.artefact_name }}
         path: extracted_artifact
     # ${{ secrets.MY_TEST_PAT }}
