@@ -22,7 +22,7 @@ jobs:
         curl -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
              -H "Accept: application/vnd.github.v3+json" \
              -L \
-             -o my-artifact.zip \
+# -o my-artifact.zip \
              https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts/my-artifact/zip
     
 
