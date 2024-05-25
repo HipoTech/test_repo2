@@ -19,7 +19,6 @@ jobs:
     - name: Download artifact from source repository
       run: |
         echo "Downloading artifact from source repository in 'download'"
-        mkdir ./download
         cd download
         curl -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
              -H "Accept: application/vnd.github.v3+json" \
@@ -28,7 +27,7 @@ jobs:
              
     - name: Show me my dir
       run: |
-        ls -R ./
+        ls -R
     # - name: Upload a Build Artifact
     #   uses: actions/upload-artifact@v3
     #   with:
