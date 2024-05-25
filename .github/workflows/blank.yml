@@ -31,13 +31,19 @@ jobs:
         echo "Downloading latest artifact with specified name from source repository"
         curl -L -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
           -o artifact.zip ${{ steps.get-artifact.outputs.url }}
-             
+
+    - name: Extract artifact
+      run: |
+        echo "Extracting artifact"
+        unzip artifact.zip -d extracted_artifact
+        
     - name: Show me my dir
       run: |
         ls -R
+        
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
         name: my-artifact2
-        path: artifact.zip
+        path: extracted_artifact
     # ${{ secrets.MY_TEST_PAT }}
