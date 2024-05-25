@@ -34,6 +34,7 @@ jobs:
           exit 1
         fi
           echo "url=$LATEST_ARTIFACT_URL" >> $GITHUB_OUTPUT
+          echo "artefact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
 
     - name: Download latest artifact with specified name
       run: |
