@@ -11,28 +11,33 @@ jobs:
 
     steps:
     
-    - name: Get latest artifact URL
+    - name: Get latest artifact URL with specified name
       id: get-artifact
       run: |
-        echo "Fetching latest artifact URL"
+        echo "Fetching latest artifact URL with specified name"
+        ARTIFACT_NAME="my-artifact"
         LATEST_ARTIFACT_URL=$(curl -s -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
           -H "Accept: application/vnd.github.v3+json" \
           "https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts" \
-          | jq -r '.artifacts | sort_by(.created_at) | last | .archive_download_url')
+          | jq -r --arg ARTIFACT_NAME "$ARTIFACT_NAME" '.artifacts | map(select(.name == $ARTIFACT_NAME)) | sort_by(.created_at) | last | .archive_download_url')
+        if [ -z "$LATEST_ARTIFACT_URL" ]; then
+          echo "No artifact found with the specified name: $ARTIFACT_NAME"
+          exit 1
+        fi
         echo "::set-output name=url::$LATEST_ARTIFACT_URL"
 
-    - name: Download latest artifact
+    - name: Download latest artifact with specified name
       run: |
-        echo "Downloading latest artifact from source repository"
+        echo "Downloading latest artifact with specified name from source repository"
         curl -L -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
           -o artifact.zip ${{ steps.get-artifact.outputs.url }}
              
     - name: Show me my dir
       run: |
         ls -R
-    # - name: Upload a Build Artifact
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: my-artifact2
-    #     path: ./my-artifact.zip
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact2
+        path: artifact.zip
     # ${{ secrets.MY_TEST_PAT }}
