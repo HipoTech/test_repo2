@@ -30,8 +30,7 @@ jobs:
 
     - name: Upload Release Asset
       run: |
-        curl -s -X POST \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Content-Type: application/zip" \
           --data-binary @./build.zip \
           ${{ steps.create_release.outputs.upload_url }}?name=build.zip
