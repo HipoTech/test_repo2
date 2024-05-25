@@ -20,8 +20,7 @@ jobs:
         REPOSITORY_NAME="test_repo1"
         AUTHORIZATION_HEADER="Authorization: token ${{ secrets.MY_TEST_PAT }}"
         ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
-        LATEST_ARTIFACT_URL=$(curl \ 
-          -s  \
+        LATEST_ARTIFACT_URL=$(curl -s  \
           -H "$AUTHORIZATION_HEADER" \
           -H "$ACCEPT_HEADER" \
           "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/actions/artifacts" \
