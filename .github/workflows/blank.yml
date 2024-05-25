@@ -8,21 +8,21 @@ on:
 jobs:
   download-upload-artifact:
     runs-on: ubuntu-latest
-
+    env:
+      ARTIFACT_NAME: my-artifact
+      REPOSITORY_OWNER: HipoTech
+      REPOSITORY_NAME: test_repo1
+      AUTHORIZATION_HEADER: token ${{ secrets.MY_TEST_PAT }}
+      ACCEPT_HEADER: application/vnd.github.v3+json
+        
     steps:
-    
     - name: Get latest artifact URL with specified name
       id: get-artifact
       run: |
         echo "Fetching latest artifact URL with specified name"
-        ARTIFACT_NAME="my-artifact"
-        REPOSITORY_OWNER="HipoTech"
-        REPOSITORY_NAME="test_repo1"
-        AUTHORIZATION_HEADER="Authorization: token ${{ secrets.MY_TEST_PAT }}"
-        ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
         LATEST_ARTIFACT_URL=$(curl -s  \
-          -H "$AUTHORIZATION_HEADER" \
-          -H "$ACCEPT_HEADER" \
+          -H "Authorization: $AUTHORIZATION_HEADER" \
+          -H "Accept: $ACCEPT_HEADER" \
           "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/actions/artifacts" \
           | jq -r --arg ARTIFACT_NAME "$ARTIFACT_NAME" '.artifacts 
           | map(select(.name == $ARTIFACT_NAME)) 
@@ -40,12 +40,12 @@ jobs:
       run: |
         echo "Downloading latest artifact with specified name from source repository"
         curl -L -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
-          -o ${{ steps.get-artifact.outputs.artefact_name }}.zip ${{ steps.get-artifact.outputs.url }}
+          -o $ARTIFACT_NAME.zip ${{ steps.get-artifact.outputs.url }}
 
     - name: Extract artifact
       run: |
         echo "Extracting artifact"
-        unzip ${{ steps.get-artifact.outputs.artefact_name }}.zip -d extracted_artifact
+        unzip $ARTIFACT_NAME.zip -d extracted_artifact
         
     - name: Show me my dir
       run: |
@@ -54,6 +54,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ steps.get-artifact.outputs.artefact_name }}
+        name: $ARTIFACT_NAME
         path: extracted_artifact
-    # ${{ secrets.MY_TEST_PAT }}
