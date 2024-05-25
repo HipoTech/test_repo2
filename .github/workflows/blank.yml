@@ -16,9 +16,10 @@ jobs:
       run: |
         echo "Fetching latest artifact URL with specified name"
         ARTIFACT_NAME="my-artifact"
+        REPOSITORY_NAME="test_repo1"
         LATEST_ARTIFACT_URL=$(curl -s -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts" \
+          "https://api.github.com/repos/HipoTech/REPOSITORY_NAME/actions/artifacts" \
           | jq -r --arg ARTIFACT_NAME "$ARTIFACT_NAME" '.artifacts | map(select(.name == $ARTIFACT_NAME)) | sort_by(.created_at) | last | .archive_download_url')
         if [ -z "$LATEST_ARTIFACT_URL" ]; then
           echo "No artifact found with the specified name: $ARTIFACT_NAME"
