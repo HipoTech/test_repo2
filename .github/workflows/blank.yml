@@ -33,8 +33,7 @@ jobs:
           echo "No artifact found with the specified name: $ARTIFACT_NAME"
           exit 1
         fi
-          echo "name=$LATEST_ARTIFACT_URL" >> $GITHUB_OUTPUT
-#         echo "::set-output name=url::$LATEST_ARTIFACT_URL"
+          echo "url=$LATEST_ARTIFACT_URL" >> $GITHUB_OUTPUT
 
     - name: Download latest artifact with specified name
       run: |
