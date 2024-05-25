@@ -25,10 +25,10 @@ jobs:
              -o my-artifact.zip \
              https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts/my-artifact/zip
 
-    - name: Extract artifact
-      run: |
-        echo "Extracting artifact"
-        unzip my-artifact.zip -d extracted_artifact
+    # - name: Extract artifact
+    #   run: |
+    #     echo "Extracting artifact"
+    #     unzip my-artifact.zip -d extracted_artifact
 
     - name: Log directory
       run: |
