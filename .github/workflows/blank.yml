@@ -11,8 +11,9 @@ jobs:
 
     steps:
     - name: Checkout target repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
+        repository: HipoTech/test_repo1
         token: ${{ secrets.TARGET_REPO_TOKEN }}
 
     - name: Download artifact from source repository
