@@ -22,6 +22,7 @@ jobs:
              
     - name: Show me my dir
       run: |
+        cd download
         ls -R
     # - name: Upload a Build Artifact
     #   uses: actions/upload-artifact@v3
