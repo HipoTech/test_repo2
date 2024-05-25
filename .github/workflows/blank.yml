@@ -10,12 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout target repository
-      uses: actions/checkout@v4
-      with:
-        repository: HipoTech/test_repo1
-        token: ${{ secrets.MY_TEST_PAT }}
-
     - name: Download artifact from source repository
       run: |
         echo "Downloading artifact from source repository in 'download'"
