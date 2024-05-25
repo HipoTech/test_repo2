@@ -25,9 +25,11 @@ jobs:
              https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts/my-artifact/zip
 # -o my-artifact.zip \
     
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: my-artifact2
-        path: ./my-artifact.zip
+    - name: Show me my dir
+      run: |
+        enho ls -R
+    # - name: Upload a Build Artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: my-artifact2
+    #     path: ./my-artifact.zip
