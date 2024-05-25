@@ -11,16 +11,21 @@ jobs:
 
     steps:
     
-    - name: Download artifact from source repository
+    - name: Get latest artifact URL
+      id: get-artifact
       run: |
-        mkdir download
-        cd download
-        echo "Downloading artifact from source repository in 'download'"
-        curl -L \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts/my-artifact/zip
+        echo "Fetching latest artifact URL"
+        LATEST_ARTIFACT_URL=$(curl -s -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts" \
+          | jq -r '.artifacts | sort_by(.created_at) | last | .archive_download_url')
+        echo "::set-output name=url::$LATEST_ARTIFACT_URL"
+
+    - name: Download latest artifact
+      run: |
+        echo "Downloading latest artifact from source repository"
+        curl -L -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
+          -o artifact.zip ${{ steps.get-artifact.outputs.url }}
              
     - name: Show me my dir
       run: |
@@ -30,3 +35,4 @@ jobs:
     #   with:
     #     name: my-artifact2
     #     path: ./my-artifact.zip
+    # ${{ secrets.MY_TEST_PAT }}
