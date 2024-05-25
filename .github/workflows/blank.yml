@@ -40,7 +40,7 @@ jobs:
       run: |
         echo "Downloading latest artifact with specified name from source repository"
         curl -L -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
-          -o artifact.zip ${{ steps.get-artifact.outputs.url }}
+          -o ${{ steps.get-artifact.outputs.artefact_name }}.zip ${{ steps.get-artifact.outputs.url }}
 
     - name: Extract artifact
       run: |
