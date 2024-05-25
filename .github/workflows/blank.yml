@@ -18,13 +18,14 @@ jobs:
 
     - name: Download artifact from source repository
       run: |
-        echo "Downloading artifact from source repository"
+        echo "Downloading artifact from source repository in 'download'"
+        mkdir ./download
+        cd download
         curl -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
              -H "Accept: application/vnd.github.v3+json" \
              -L \
              https://api.github.com/repos/HipoTech/test_repo1/actions/artifacts/my-artifact/zip
-# -o my-artifact.zip \
-    
+             
     - name: Show me my dir
       run: |
         ls -R ./
