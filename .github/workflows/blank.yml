@@ -33,14 +33,15 @@ jobs:
           echo "No artifact found with the name: $ARTIFACT_NAME"
           exit 1
         fi
-          echo "url=$LATEST_ARTIFACT_URL" >> $GITHUB_OUTPUT
-          echo "artefact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+          curl -L \
+            -H "Authorization: $AUTHORIZATION_HEADER" \
+            -o $ARTIFACT_NAME.zip $LATEST_ARTIFACT_URL
 
-    - name: Download latest artifact with specified name
-      run: |
-        echo "Downloading latest artifact with specified name from source repository"
-        curl -L -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
-          -o $ARTIFACT_NAME.zip ${{ steps.get-artifact.outputs.url }}
+    # - name: Download latest artifact with specified name
+    #   run: |
+    #     echo "Downloading latest artifact with specified name from source repository"
+    #     curl -L -H "Authorization: token ${{ secrets.MY_TEST_PAT }}" \
+    #       -o $ARTIFACT_NAME.zip ${{ steps.get-artifact.outputs.url }}
 
     - name: Extract artifact
       run: |
