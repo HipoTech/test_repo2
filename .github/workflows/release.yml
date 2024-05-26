@@ -1,36 +1,55 @@
-name: Release
+name: Create Release
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Create .zip file
-      run: zip -r build.zip ./
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
 
-    - name: Create Release
+    - name: Install dependencies
+      run: npm install
+
+    - name: Read and increment version
+      id: version
+      run: |
+        PACKAGE_VERSION=$(jq -r '.version' package.json)
+        NEW_VERSION=$(echo $PACKAGE_VERSION | awk -F. -v OFS=. '{$NF++;print}')
+        echo "New version: $NEW_VERSION"
+        jq --arg new_version $NEW_VERSION '.version = $new_version' package.json > tmp.json && mv tmp.json package.json
+        echo "::set-output name=VERSION::$NEW_VERSION"
+        
+        PACKAGE_NAME=$(jq -r '.name' package.json)
+        echo "Package name: $PACKAGE_NAME"
+        RELEASE_NAME="${PACKAGE_NAME}_${NEW_VERSION}"
+        echo "::set-output name=RELEASE_NAME::$RELEASE_NAME"
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git add package.json
+        git commit -m "chore: bump version to ${{ steps.version.outputs.VERSION }}"
+        git push
+
+    - name: Create GitHub Release
       id: create_release
-      run: |
-        API_JSON=$(jq -n --arg tag "$GITHUB_REF" --arg name "Release $GITHUB_REF" \
-        '{ tag_name: $tag, name: $name, draft: false, prerelease: false }')
-        response=$(curl -s -X POST \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d "$API_JSON" \
-          https://api.github.com/repos/${{ github.repository }}/releases)
-        echo "$response"
-        upload_url=$(echo "$response" | jq -r .upload_url | sed -e "s/{?name,label}//")
-        echo "::set-output name=upload_url::$upload_url"
-
-    - name: Upload Release Asset
-      run: |
-        curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Content-Type: application/zip" \
-          --data-binary @./build.zip \
-          ${{ steps.create_release.outputs.upload_url }}?name=build.zip
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_TEST_PAT }}
+      with:
+        tag_name: v${{ steps.version.outputs.VERSION }}
+        release_name: ${{ steps.version.outputs.RELEASE_NAME }}
+        draft: false
+        prerelease: false
