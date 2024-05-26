@@ -56,6 +56,9 @@ jobs:
         draft: false
         prerelease: false
         
+    - name: Create build.zip
+      run: zip build.zip package.json
+
     - name: Upload build.zip to release
       run: |
         # Get the release ID
