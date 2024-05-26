@@ -56,7 +56,7 @@ jobs:
         draft: false
         prerelease: false
         
-    - name: Upload package.json to release
+    - name: Upload build.zip to release
       run: |
         # Get the release ID
         release_id=$(curl \
@@ -65,9 +65,9 @@ jobs:
           https://api.github.com/repos/${{ github.repository }}/releases/tags/v${{ steps.version.outputs.VERSION }} \
           | jq -r .id)
 
-        # Upload the package.json file to the release
+        # Upload the build.zip file to the release
         curl \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data-binary @package.json \
-          "https://uploads.github.com/repos/${{ github.repository }}/releases/${release_id}/assets?name=package.json"
+          -H "Content-Type: application/zip" \
+          --data-binary @build.zip \
+          "https://uploads.github.com/repos/${{ github.repository }}/releases/${release_id}/assets?name=build.zip"
