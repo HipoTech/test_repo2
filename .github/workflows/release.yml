@@ -36,12 +36,16 @@ jobs:
         echo "::set-output name=RELEASE_NAME::$RELEASE_NAME"
 
     - name: Commit and push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git config --global user.name 'HipoTech'
-        git config --global user.email 'hipo_88@abv.bg'
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git config --global credential.helper store
+        echo "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com" > ~/.git-credentials
         git add package.json
         git commit -m "chore: bump version to ${{ steps.version.outputs.VERSION }}"
-        git push
+        git push origin HEAD:main
 
     - name: Create GitHub Release
       id: create_release
