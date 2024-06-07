@@ -19,35 +19,42 @@ jobs:
     - name: Download latest artifact specified name
       id: get-artifact
       run: |
-        echo "Fetching latest artifact URL with specified name"
-        LATEST_ARTIFACT_URL=$(curl -s  \
+        echo $(curl -s  \
           -H "Authorization: $AUTHORIZATION_HEADER" \
           -H "Accept: $ACCEPT_HEADER" \
-          "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/actions/artifacts" \
-          | jq -r --arg ARTIFACT_NAME "$ARTIFACT_NAME" '.artifacts 
-          | map(select(.name == $ARTIFACT_NAME)) 
-          | sort_by(.created_at) 
-          | last 
-          | .archive_download_url')
-        if [ -z "$LATEST_ARTIFACT_URL" ]; then
-          echo "No artifact found with the name: $ARTIFACT_NAME"
-          exit 1
-        fi
-          curl -L \
-            -H "Authorization: $AUTHORIZATION_HEADER" \
-            -o $ARTIFACT_NAME.zip $LATEST_ARTIFACT_URL
+          "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/actions/artifacts")
+    # - name: Download latest artifact specified name
+    #   id: get-artifact
+    #   run: |
+    #     echo "Fetching latest artifact URL with specified name"
+    #     LATEST_ARTIFACT_URL=$(curl -s  \
+    #       -H "Authorization: $AUTHORIZATION_HEADER" \
+    #       -H "Accept: $ACCEPT_HEADER" \
+    #       "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/actions/artifacts" \
+    #       | jq -r --arg ARTIFACT_NAME "$ARTIFACT_NAME" '.artifacts 
+    #       | map(select(.name == $ARTIFACT_NAME)) 
+    #       | sort_by(.created_at) 
+    #       | last 
+    #       | .archive_download_url')
+    #     if [ -z "$LATEST_ARTIFACT_URL" ]; then
+    #       echo "No artifact found with the name: $ARTIFACT_NAME"
+    #       exit 1
+    #     fi
+    #       curl -L \
+    #         -H "Authorization: $AUTHORIZATION_HEADER" \
+    #         -o $ARTIFACT_NAME.zip $LATEST_ARTIFACT_URL
 
-    - name: Extract artifact
-      run: |
-        echo "Extracting artifact"
-        unzip $ARTIFACT_NAME.zip -d extracted_artifact
+    # - name: Extract artifact
+    #   run: |
+    #     echo "Extracting artifact"
+    #     unzip $ARTIFACT_NAME.zip -d extracted_artifact
         
-    - name: Show me my dir
-      run: |
-        ls -R
+    # - name: Show me my dir
+    #   run: |
+    #     ls -R
         
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ env.ARTIFACT_NAME }}
-        path: extracted_artifact
+    # - name: Upload a Build Artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: ${{ env.ARTIFACT_NAME }}
+    #     path: extracted_artifact
