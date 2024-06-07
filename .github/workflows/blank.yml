@@ -13,7 +13,7 @@ jobs:
       REPOSITORY_OWNER: HipoTech
       REPOSITORY_NAME: test_repo1
       AUTHORIZATION_HEADER: token ${{ secrets.MY_TEST_PAT }}
-      ACCEPT_HEADER: application/vnd.github.v3+json
+      ACCEPT_HEADER: application/vnd.github+json
         
     steps:
     - name: Download latest artifact specified name
