@@ -22,7 +22,7 @@ jobs:
         echo $(curl -s  \
           -H "Authorization: $AUTHORIZATION_HEADER" \
           -H "Accept: $ACCEPT_HEADER" \
-          "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/actions")
+          "https://api.github.com/repos/$REPOSITORY_OWNER/$REPOSITORY_NAME/actions/artifacts")
     # - name: Download latest artifact specified name
     #   id: get-artifact
     #   run: |
